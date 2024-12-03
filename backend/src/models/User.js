@@ -1,24 +1,40 @@
-const { query } = require('../config/db');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db'); 
 
-const createUser = async (name, email, passwordHash, role = 'user') => {
-  const sql = `INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)`;
-  return query(sql, [name, email, passwordHash, role]);
-};
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
+  password_hash: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: 'user',
+  },
+}, {
+  tableName: 'users',
+  timestamps: true,
+});
 
-const findUserByEmail = async (email) => {
-  const sql = `SELECT * FROM users WHERE email = ?`;
-  const users = await query(sql, [email]);
-  return users[0];
-};
+// User.hasMany(Medicine, {
+//   foreignKey: 'user_id',
+// });
 
-const findUserById = async (id) => {
-  const sql = `SELECT * FROM users WHERE id = ?`;
-  const users = await query(sql, [id]);
-  return users[0];
-};
+module.exports = { User };
 
-module.exports = {
-  createUser,
-  findUserByEmail,
-  findUserById,
-};

@@ -1,39 +1,24 @@
-const mysql = require('mysql2/promise'); 
+const { Sequelize } = require('sequelize');
 
-let db; 
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'mysql', 
+  logging: false,
+});
 
-async function connectDB() {
+const connectDB = async () => {
   try {
-
-    db = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-    });
-
+    await sequelize.authenticate(); // Testing
     console.log('Database connected successfully!');
   } catch (error) {
     console.error('Unable to connect to the database:', error.message);
-    process.exit(1);
+    process.exit(1); // Exit on failure
   }
-}
+};
 
 
-async function query(sql, params) {
-  try {
-    if (!db) {
-      throw new Error('Database connection is not initialized. Call connectDB first.');
-    }
-    const [rows] = await db.execute(sql, params);
-    return rows;
-  } catch (error) {
-    console.error('Query failed:', error.message);
-    throw error;
-  }
-}
 
 module.exports = {
+  sequelize,
   connectDB,
-  query, 
 };
