@@ -27,7 +27,7 @@ const AcknowledgmentLog = sequelize.define('AcknowledgmentLog', {
   },
   status: {
     type: DataTypes.STRING,
-    allowNull: false,  // Either 'acknowledged' or 'not acknowledged'
+    allowNull: false,  // Either 'taken' or 'not'
   },
   timestamp: {
     type: DataTypes.DATE,

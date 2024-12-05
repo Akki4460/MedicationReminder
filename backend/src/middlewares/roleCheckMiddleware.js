@@ -1,5 +1,5 @@
 const checkAdminRole = (req, res, next) => {
-    // Ensure the user role exists and is admin
+    // Ensure the user role exists and is admin for superadmin API
     if (req.user?.role !== 'admin') {
       return res.status(403).json({ message: 'Access denied. Admins only.' });
     }

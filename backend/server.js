@@ -16,7 +16,7 @@ app.set('db', connectDB); // Allows other parts of the app to access `db` throug
 async function syncDatabase() {
   try {
     // Sync the models with the database (this will alter the table if needed)
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: true});
     console.log('Database synced successfully!');
   } catch (error) {
     console.error('Database sync failed:', error);
